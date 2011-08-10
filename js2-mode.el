@@ -9825,7 +9825,10 @@ In particular, return the buffer position of the first `for' kwd."
               (backward-list))
             (if (nth 1 p)
                 (progn (goto-char (1+ (nth 1 p)))
-                       (skip-chars-forward " \t"))
+                       (skip-chars-forward " \t")
+		       ;; special case for 'foobar(..., function() {'
+		       (if (search-forward-regexp "\\<function\\>" bracket t)
+			   (back-to-indentation)))
               (back-to-indentation))
             (cond (same-indent-p
                    (current-column))
